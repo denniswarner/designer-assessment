@@ -1,52 +1,26 @@
 // File: src/app/assessment/[page]/page.tsx
-// This is our special page that handles all assessment steps (1-8)
-// When someone visits /assessment/1, /assessment/2, etc., this page will show the right content
+// Purpose: This component handles all assessment pages (1-8)
+// Each page number shows different content based on the assessment stage
 
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import * as RadioGroup from '@radix-ui/react-radio-group'
 import { notFound } from 'next/navigation'
 
-// This function tells us what content to show for each page number
+// This function provides the content for each assessment page
 function getPageContent(pageNumber: number) {
   const pages = {
     1: {
-      title: 'Product Designer',
-      description: 'Basic competency assessment for Product Designer role'
+      title: 'Assessment Information',
+      description: 'Please select the type of assessment you would like to complete.'
     },
-    2: {
-      title: 'Product Designer II',
-      description: 'Advanced competency assessment for Product Designer II role'
-    },
-    3: {
-      title: 'Senior Product Designer',
-      description: 'Leadership and technical assessment for Senior Product Designer'
-    },
-    4: {
-      title: 'Senior Product Designer II',
-      description: 'Advanced leadership assessment for Senior Product Designer II'
-    },
-    5: {
-      title: 'Principal Product Designer',
-      description: 'Strategic assessment for Principal Product Designer'
-    },
-    6: {
-      title: 'Principal Product Designer II',
-      description: 'Advanced strategic assessment for Principal Product Designer II'
-    },
-    7: {
-      title: 'Review Your Answers',
-      description: 'Review and confirm your assessment responses'
-    },
-    8: {
-      title: 'Submit Assessment',
-      description: 'Final review and submission'
-    }
+    // ... other pages content would go here
   }
   return pages[pageNumber as keyof typeof pages]
 }
 
-// This is our main page component
 export default function AssessmentPage({
   params
 }: {
@@ -54,15 +28,21 @@ export default function AssessmentPage({
 }) {
   const router = useRouter()
   const pageNumber = parseInt(params.page)
-  
-  // Make sure we have a valid page number
+  const [formData, setFormData] = useState({
+  assessmentType: 'self',
+  fullName: '',
+  email: '',
+  managerName: '',
+  managerEmail: ''
+})
+  // Validate page number
   if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > 8) {
     notFound()
   }
 
   const pageContent = getPageContent(pageNumber)
 
-  // Functions to handle navigation
+  // Handle navigation
   const goToNextPage = () => {
     if (pageNumber < 8) {
       router.push(`/assessment/${pageNumber + 1}`)
@@ -75,6 +55,131 @@ export default function AssessmentPage({
     } else {
       router.push('/')
     }
+  }
+
+  // Render assessment content based on page number
+  const renderAssessmentContent = () => {
+    if (pageNumber === 1) {
+      return (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Assessment Type</h3>
+            
+            <RadioGroup.Root
+  value={formData.assessmentType}
+  onValueChange={(value) => setFormData(prev => ({ ...prev, assessmentType: value }))}
+  className="space-y-3"
+            >
+              {/* Self Assessment Option */}
+              <div className="flex items-center">
+                <RadioGroup.Item
+                  value="self"
+                  id="self"
+                  className="w-4 h-4 rounded-full border border-gray-300 mr-2 relative
+                           data-[state=checked]:border-blue-600 data-[state=checked]:border-2"
+                >
+                  <RadioGroup.Indicator className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-blue-600" />
+                  </RadioGroup.Indicator>
+                </RadioGroup.Item>
+                <label htmlFor="self" className="text-gray-700">
+                  Self Assessment
+                </label>
+              </div>
+
+              {/* Manager Assessment Option */}
+              <div className="flex items-center">
+                <RadioGroup.Item
+                  value="manager"
+                  id="manager"
+                  className="w-4 h-4 rounded-full border border-gray-300 mr-2 relative
+                           data-[state=checked]:border-blue-600 data-[state=checked]:border-2"
+                >
+                  <RadioGroup.Indicator className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-blue-600" />
+                  </RadioGroup.Indicator>
+                </RadioGroup.Item>
+                <label htmlFor="manager" className="text-gray-700">
+                  Manager Assessment
+                </label>
+              </div>
+            </RadioGroup.Root>
+          </div>
+          <div className="space-y-2">
+  <label htmlFor="fullName" className="block text-lg font-medium text-gray-700">
+    Full Name
+  </label>
+  <input
+    type="text"
+    id="fullName"
+    name="fullName"
+    value={formData.fullName}
+    onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
+    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+    placeholder="Enter your full name"
+  />
+</div>
+          {/* Email Input Field */}
+          <div className="space-y-2">
+            <label htmlFor="email" className="block text-lg font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Enter your email address"
+            />
+          </div>
+
+{/* Conditional Manager Fields - Only shown for Self Assessment */}
+{formData.assessmentType === 'self' && (
+  <>
+    {/* Manager Name Field */}
+    <div className="space-y-2">
+      <label htmlFor="managerName" className="block text-lg font-medium text-gray-700">
+        Manager's Name
+      </label>
+      <input
+        type="text"
+        id="managerName"
+        name="managerName"
+        value={formData.managerName}
+        onChange={(e) => setFormData(prev => ({ ...prev, managerName: e.target.value }))}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter your manager's full name"
+      />
+    </div>
+
+    {/* Manager Email Field */}
+    <div className="space-y-2">
+      <label htmlFor="managerEmail" className="block text-lg font-medium text-gray-700">
+        Manager's Email
+      </label>
+      <input
+        type="email"
+        id="managerEmail"
+        name="managerEmail"
+        value={formData.managerEmail}
+        onChange={(e) => setFormData(prev => ({ ...prev, managerEmail: e.target.value }))}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Enter your manager's email address"
+      />
+    </div>
+  </>
+)}
+</div>
+)
+    }
+    
+    return (
+      <div className="h-64 bg-gray-50 rounded flex items-center justify-center text-gray-400">
+        Assessment content for page {pageNumber} will go here
+      </div>
+    )
   }
 
   return (
@@ -97,10 +202,8 @@ export default function AssessmentPage({
         <h2 className="text-2xl font-semibold mb-4">{pageContent.title}</h2>
         <p className="text-gray-600 mb-8">{pageContent.description}</p>
         
-        {/* This is where we'll add the actual assessment content later */}
-        <div className="h-64 bg-gray-50 rounded flex items-center justify-center text-gray-400">
-          Assessment content for {pageContent.title} will go here
-        </div>
+        {/* Render the appropriate content for the current page */}
+        {renderAssessmentContent()}
       </div>
 
       {/* Navigation buttons */}
@@ -112,21 +215,12 @@ export default function AssessmentPage({
           Previous
         </button>
 
-        {pageNumber === 8 ? (
-          <button
-            onClick={() => alert('Assessment completed! This is a placeholder.')}
-            className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          >
-            Submit Assessment
-          </button>
-        ) : (
-          <button
-            onClick={goToNextPage}
-            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Next
-          </button>
-        )}
+        <button
+          onClick={goToNextPage}
+          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Next
+        </button>
       </div>
     </div>
   )
