@@ -9,6 +9,15 @@ import { use } from 'react'
 import ProductDesignerAssessment from '@/components/ProductDesignerAssessment'
 import ProductDesignerIIAssessment from '@/components/ProductDesignerIIAssessment'
 import SeniorProductDesignerAssessment from '@/components/SeniorProductDesignerAssessment'
+import SeniorProductDesignerIIAssessment from '@/components/SeniorProductDesignerIIAssessment'
+import PrincipalProductDesignerAssessment from '@/components/PrincipalProductDesignerAssessment'
+import PrincipalProductDesignerIIAssessment from '@/components/PrincipalProductDesignerIIAssessment'
+import AssessmentSummary from '@/components/AssessmentSummary'
+
+
+
+
+
 
 
 
@@ -51,11 +60,7 @@ function getPageContent(pageNumber: number): PageContent {
       description: 'Advanced strategic assessment for Principal Product Designer II'
     },
     8: {
-      title: 'Review Your Answers',
-      description: 'Review and confirm your assessment responses'
-    },
-    9: {
-      title: 'Submit Assessment',
+      title: 'Assessment Summary',
       description: 'Final review and submission of your assessment'
     }
   }
@@ -81,7 +86,7 @@ export default function AssessmentPage({
   })
 
   // Validate page number
-  if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > 8) {
+  if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > 9) {
     notFound()
   }
 
@@ -89,8 +94,12 @@ export default function AssessmentPage({
 
   // Navigation handlers
   const goToNextPage = () => {
-    if (pageNumber < 8) {
-      router.push(`/assessment/${pageNumber + 1}`)
+    if (pageNumber < 9) {
+      if (pageNumber === 8) {
+        router.push('/assessment/summary')
+      } else {
+        router.push(`/assessment/${pageNumber + 1}`)
+      }
     }
   }
 
@@ -219,15 +228,22 @@ export default function AssessmentPage({
         </div>
       )
     }
-    
-   // For page 2, show the Product Designer assessment
+//// renderAssessmentContent function
    if (pageNumber === 2) {
     return <ProductDesignerAssessment />
   } else if (pageNumber === 3) {
     return <ProductDesignerIIAssessment />
   } else if (pageNumber === 4) {
     return <SeniorProductDesignerAssessment />
-  }
+  } else if (pageNumber === 5) {
+    return <SeniorProductDesignerIIAssessment />
+  } else if (pageNumber === 6) {
+  return <PrincipalProductDesignerAssessment />
+} else if (pageNumber === 7) {
+  return <PrincipalProductDesignerIIAssessment />
+} else if (pageNumber === 8) {
+  return <AssessmentSummary />
+}
 
 // For other pages, show a placeholder
 return (
@@ -235,7 +251,7 @@ return (
     Assessment content for page {pageNumber} will go here
   </div>
 )
-  }
+}
 
   return (
     <div className="max-w-4xl mx-auto">
