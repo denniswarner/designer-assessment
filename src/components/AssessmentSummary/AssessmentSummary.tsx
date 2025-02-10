@@ -100,6 +100,15 @@ const AssessmentSummary = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      
+      {/* Header - using purple theme for Principal PD II */}
+      <div className="mb-8 p-6 bg-green-100 rounded-lg">
+        <h1 className="text-2xl font-bold text-gray-900">Assessment Summary</h1>
+        <p className="text-gray-600 mt-2">
+          Summary for the Product Designer Assessment
+        </p>
+      </div>
+
       {/* Role summaries */}
       {roleSummaries.map((role) => (
         <div key={role.title} className="mb-8">

@@ -20,12 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* Global header - appears on every page */}
-        <header className="bg-blue-600 text-white py-4 px-6">
-          <h1 className="text-xl font-semibold">
-            Product Design - Competency Assessment
-          </h1>
-        </header>
+
 
         {/* Black background wrapper for main content */}
         <div className="min-h-screen bg-black">

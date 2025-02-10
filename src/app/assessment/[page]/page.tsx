@@ -1,11 +1,12 @@
-// File: src/app/assessment/[page]/page.tsx
 'use client'
 
-import { useState } from 'react'
+// Essential imports for our page functionality
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
+import PageHeader from '@/components/PageHeader'
 import ProductDesignerAssessment from '@/components/ProductDesignerAssessment'
 import ProductDesignerIIAssessment from '@/components/ProductDesignerIIAssessment'
 import SeniorProductDesignerAssessment from '@/components/SeniorProductDesignerAssessment'
@@ -14,21 +15,13 @@ import PrincipalProductDesignerAssessment from '@/components/PrincipalProductDes
 import PrincipalProductDesignerIIAssessment from '@/components/PrincipalProductDesignerIIAssessment'
 import AssessmentSummary from '@/components/AssessmentSummary'
 
-
-
-
-
-
-
-
-
-// Define the page content interface
+// This interface defines what each page's content should look like
 interface PageContent {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }
 
-// This function provides the content for each assessment page
+// This defines all the possible pages in our assessment
 function getPageContent(pageNumber: number): PageContent {
   const pages: Record<number, PageContent> = {
     1: {
@@ -60,23 +53,25 @@ function getPageContent(pageNumber: number): PageContent {
       description: 'Advanced strategic assessment for Principal Product Designer II'
     },
     8: {
-      title: 'Assessment Summary',
-      description: 'Final review and submission of your assessment'
+      title: 'Review Your Answers',
+      description: 'Review and confirm your assessment responses'
     }
   }
   return pages[pageNumber] || notFound()
 }
 
+// Main page component
 export default function AssessmentPage({
   params
 }: {
   params: Promise<{ page: string }>
 }) {
-  // Properly unwrap the params using React.use()
+  // Initialize our router and get the current page number
   const resolvedParams = use(params)
   const pageNumber = parseInt(resolvedParams.page)
   const router = useRouter()
   
+  // Set up our form state
   const [formData, setFormData] = useState({
     assessmentType: 'self',
     fullName: '',
@@ -85,21 +80,18 @@ export default function AssessmentPage({
     managerEmail: ''
   })
 
-  // Validate page number
-  if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > 9) {
+  // If we have an invalid page number, show the 404 page
+  if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > 8) {
     notFound()
   }
 
+  // Get the content for the current page
   const pageContent = getPageContent(pageNumber)
 
-  // Navigation handlers
+  // Handle navigation between pages
   const goToNextPage = () => {
-    if (pageNumber < 9) {
-      if (pageNumber === 8) {
-        router.push('/assessment/summary')
-      } else {
-        router.push(`/assessment/${pageNumber + 1}`)
-      }
+    if (pageNumber < 8) {
+      router.push(`/assessment/${pageNumber + 1}`)
     }
   }
 
@@ -111,7 +103,7 @@ export default function AssessmentPage({
     }
   }
 
-  // Render assessment content based on page number
+  // Render the appropriate content for the current page
   const renderAssessmentContent = () => {
     if (pageNumber === 1) {
       return (
@@ -124,7 +116,6 @@ export default function AssessmentPage({
               onValueChange={(value) => setFormData(prev => ({ ...prev, assessmentType: value }))}
               className="space-y-3"
             >
-              {/* Self Assessment Option */}
               <div className="flex items-center">
                 <RadioGroup.Item
                   value="self"
@@ -141,7 +132,6 @@ export default function AssessmentPage({
                 </label>
               </div>
 
-              {/* Manager Assessment Option */}
               <div className="flex items-center">
                 <RadioGroup.Item
                   value="manager"
@@ -160,9 +150,7 @@ export default function AssessmentPage({
             </RadioGroup.Root>
           </div>
 
-          {/* Form Fields */}
           <div className="space-y-4">
-            {/* Full Name Input */}
             <div className="space-y-2">
               <label htmlFor="fullName" className="block text-lg font-medium text-gray-700">
                 Full Name
@@ -177,7 +165,6 @@ export default function AssessmentPage({
               />
             </div>
 
-            {/* Email Input */}
             <div className="space-y-2">
               <label htmlFor="email" className="block text-lg font-medium text-gray-700">
                 Email
@@ -192,7 +179,6 @@ export default function AssessmentPage({
               />
             </div>
 
-            {/* Conditional Manager Fields */}
             {formData.assessmentType === 'self' && (
               <>
                 <div className="space-y-2">
@@ -228,69 +214,81 @@ export default function AssessmentPage({
         </div>
       )
     }
-//// renderAssessmentContent function
-   if (pageNumber === 2) {
-    return <ProductDesignerAssessment />
-  } else if (pageNumber === 3) {
-    return <ProductDesignerIIAssessment />
-  } else if (pageNumber === 4) {
-    return <SeniorProductDesignerAssessment />
-  } else if (pageNumber === 5) {
-    return <SeniorProductDesignerIIAssessment />
-  } else if (pageNumber === 6) {
-  return <PrincipalProductDesignerAssessment />
-} else if (pageNumber === 7) {
-  return <PrincipalProductDesignerIIAssessment />
-} else if (pageNumber === 8) {
-  return <AssessmentSummary />
-}
+    
+    if (pageNumber === 2) {
+      return <ProductDesignerAssessment />
+    }
+    
+    if (pageNumber === 3) {
+      return <ProductDesignerIIAssessment />
+    }
 
-// For other pages, show a placeholder
-return (
-  <div className="h-64 bg-gray-50 rounded flex items-center justify-center text-gray-400">
-    Assessment content for page {pageNumber} will go here
-  </div>
-)
-}
+    if (pageNumber === 4) {
+      return <SeniorProductDesignerAssessment />
+    }
 
+    if (pageNumber === 5) {
+      return <SeniorProductDesignerIIAssessment />
+    }
+
+    if (pageNumber === 6) {
+      return <PrincipalProductDesignerAssessment />
+    }
+
+    if (pageNumber === 7) {
+      return <PrincipalProductDesignerIIAssessment />
+    }
+
+    if (pageNumber === 8) {
+      return <AssessmentSummary/>
+    }
+
+    return (
+      <div className="h-64 bg-gray-50 rounded flex items-center justify-center text-gray-400">
+        Assessment content for page {pageNumber} will go here
+      </div>
+    )
+  }
+
+  // The main page layout
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Progress bar */}
-      <div className="mb-8">
-        <div className="h-2 bg-gray-200 rounded-full">
-          <div 
-            className="h-2 bg-blue-600 rounded-full transition-all duration-300"
-            style={{ width: `${(pageNumber / 8) * 100}%` }}
-          />
+    <div className="w-full">
+      <PageHeader />
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Progress bar */}
+        <div className="mb-8 pt-6">
+          <div className="h-2 bg-gray-200 rounded-full">
+            <div 
+              className="h-2 bg-blue-600 rounded-full transition-all duration-300"
+              style={{ width: `${(pageNumber / 8) * 100}%` }}
+            />
+          </div>
+          <div className="mt-2 text-sm text-gray-600 text-right">
+            Step {pageNumber} of 8
+          </div>
         </div>
-        <div className="mt-2 text-sm text-gray-600 text-right">
-          Step {pageNumber} of 8
+
+        {/* Main content area */}
+        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+          {renderAssessmentContent()}
         </div>
-      </div>
 
-      {/* Main content area */}
-      <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-        <h2 className="text-2xl font-semibold mb-4">{pageContent.title}</h2>
-        <p className="text-gray-600 mb-8">{pageContent.description}</p>
-        
-        {renderAssessmentContent()}
-      </div>
+        {/* Navigation buttons */}
+        <div className="flex justify-between pb-10">
+          <button
+            onClick={goToPreviousPage}
+            className="px-6 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+          >
+            Previous
+          </button>
 
-      {/* Navigation buttons */}
-      <div className="flex justify-between">
-        <button
-          onClick={goToPreviousPage}
-          className="px-6 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-        >
-          Previous
-        </button>
-
-        <button
-          onClick={goToNextPage}
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Next
-        </button>
+          <button
+            onClick={goToNextPage}
+            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   )
