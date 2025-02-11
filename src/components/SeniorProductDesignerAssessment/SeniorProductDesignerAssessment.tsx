@@ -193,35 +193,32 @@ const SeniorProductDesignerAssessment = (): React.ReactElement => {
           <div className="space-y-6">
             {section.criteria.map((criterion, criterionIndex) => (
               <div key={criterion.id} className="pb-4">
-                <p className="text-sm text-gray-600 mb-2">
-                  {criterion.description}
-                </p>
-                
-                <ScoreSlider
-                  value={criterion.score}
-                  onChange={(value: number) => 
-                    updateScore(sectionIndex, criterionIndex, value)
-                  }
-                  min={0}
-                  max={5}
-                  step={0.5}
-                  showLabels={true}
-                />
+<ScoreSlider
+  value={criterion.score}
+  onChange={(value: number) => 
+    updateScore(sectionIndex, criterionIndex, value)
+  }
+  min={0}
+  max={5}
+  step={0.5}
+  showLabels={true}
+  description={criterion.description}
+/>
               </div>
             ))}
           </div>
           
           {/* Section score */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-500">
-                {section.title} Score
-              </span>
-              <span className="text-sm font-bold text-gray-900">
-                {section.averageScore.toFixed(1)}
-              </span>
-            </div>
-          </div>
+          <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+  <div className="flex justify-between items-center">
+    <span className="text-lg font-bold text-gray-500">
+      {section.title} Score
+    </span>
+    <span className="text-lg font-bold text-gray-900">
+      {section.averageScore.toFixed(1)}
+    </span>
+  </div>
+</div>
         </div>
       ))}
 

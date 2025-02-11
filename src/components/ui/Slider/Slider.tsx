@@ -1,11 +1,9 @@
 // File: src/components/ui/Slider/Slider.tsx
 // Purpose: A reusable slider component for scoring assessments
-// This component provides a consistent scoring interface across the application
 
 import React from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
 
-// Define our component's props with explicit TypeScript types
 export interface ScoreSliderProps {
   value: number;
   onChange: (value: number) => void;
@@ -13,6 +11,7 @@ export interface ScoreSliderProps {
   max?: number;
   step?: number;
   showLabels?: boolean;
+  description?: string;
 }
 
 const ScoreSlider: React.FC<ScoreSliderProps> = ({
@@ -21,58 +20,63 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
   min = 0,
   max = 5,
   step = 0.5,
-  showLabels = true
+  showLabels = true,
+  description
 }) => {
-  // Create a properly typed array for our labels
-  const labelValues: number[] = Array.from(
-    { length: ((max - min) / 1) + 1 },
-    (_, i): number => min + i
-  );
+  // Create array for just the labels (we removed the ticks array since we don't need it anymore)
+  const labels = Array.from({ length: max - min + 1 }, (_, i) => min + i);
 
-  // Handle value changes with type safety
   const handleValueChange = (newValues: number[]): void => {
     onChange(newValues[0]);
   };
 
   return (
-    <div className="space-y-2">
-      <div className="relative">
-        <RadixSlider.Root
-          className="relative flex items-center select-none touch-none w-full h-5"
-          value={[value]}
-          max={max}
-          min={min}
-          step={step}
-          onValueChange={handleValueChange}
-        >
-          <RadixSlider.Track className="bg-gray-200 relative grow h-1 rounded-full">
-            <RadixSlider.Range className="absolute bg-blue-600 rounded-full h-full" />
-          </RadixSlider.Track>
-          <RadixSlider.Thumb
-            className="block w-4 h-4 bg-white border-2 border-blue-600 rounded-full hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          />
-        </RadixSlider.Root>
-
-        {/* Tick marks with type-safe mapping */}
-        <div className="absolute top-[10px] left-0 right-0 flex justify-between px-[6px]">
-          {labelValues.map((tickValue: number): React.ReactElement => (
-            <div 
-              key={tickValue} 
-              className="w-0.5 h-1 bg-gray-300"
-            />
-          ))}
+    <div className="flex justify-between items-start gap-20 py-2">
+      {/* Description text on the left */}
+      {description && (
+        <div className="flex-1">
+          <p className="text-sm text-gray-600">{description}</p>
         </div>
+      )}
+      
+      {/* Slider container on the right */}
+      <div className="w-60">
+        <div className="relative">
+          {/* The actual slider component */}
+          <RadixSlider.Root
+            className="relative flex items-center select-none touch-none w-full h-10"
+            value={[value]}
+            max={max}
+            min={min}
+            step={step}
+            onValueChange={handleValueChange}
+          >
+            {/* Background track */}
+            <RadixSlider.Track className="relative h-2 w-full grow rounded-full bg-gray-200">
+              {/* Colored part of the track */}
+              <RadixSlider.Range className="absolute h-full rounded-full bg-blue-600" />
+            </RadixSlider.Track>
 
-        {/* Numeric labels with conditional rendering and type safety */}
-        {showLabels && (
-          <div className="relative mt-2 flex justify-between text-xs text-gray-600">
-            {labelValues.map((labelValue: number): React.ReactElement => (
-              <div key={labelValue} className="flex flex-col items-center">
-                <span>{labelValue}</span>
-              </div>
-            ))}
-          </div>
-        )}
+            {/* The draggable thumb */}
+            <RadixSlider.Thumb
+              className="block w-5 h-5 bg-white border-2 border-blue-600 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 hover:bg-gray-50"
+            />
+          </RadixSlider.Root>
+
+          {/* Labels container */}
+          {showLabels && (
+            <div className="absolute left-0 right-0 top-8 flex justify-between">
+              {labels.map((label) => (
+                <div
+                  key={label}
+                  className="flex flex-col items-center"
+                >
+                  <span className="text-sm text-gray-600">{label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
