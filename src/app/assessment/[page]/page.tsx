@@ -1,12 +1,13 @@
 'use client'
 
-// Essential imports for our page functionality
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
+import { useUser } from '@/context/UserContext'
 import PageHeader from '@/components/PageHeader'
+import NameDisplay from '@/components/NameDisplay'
 import ProductDesignerAssessment from '@/components/ProductDesignerAssessment'
 import ProductDesignerIIAssessment from '@/components/ProductDesignerIIAssessment'
 import SeniorProductDesignerAssessment from '@/components/SeniorProductDesignerAssessment'
@@ -70,15 +71,22 @@ export default function AssessmentPage({
   const resolvedParams = use(params)
   const pageNumber = parseInt(resolvedParams.page)
   const router = useRouter()
+  const { setFullName, fullName } = useUser()
   
   // Set up our form state
   const [formData, setFormData] = useState({
     assessmentType: 'self',
-    fullName: '',
+    fullName: fullName || '',
     email: '',
     managerName: '',
     managerEmail: ''
   })
+
+  useEffect(() => {
+    if (fullName) {
+      setFormData(prev => ({ ...prev, fullName }));
+    }
+  }, [fullName]);
 
   // If we have an invalid page number, show the 404 page
   if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > 8) {
@@ -159,7 +167,11 @@ export default function AssessmentPage({
                 type="text"
                 id="fullName"
                 value={formData.fullName}
-                onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
+                onChange={(e) => {
+                  const newName = e.target.value;
+                  setFormData(prev => ({ ...prev, fullName: newName }));
+                  setFullName(newName);
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter your full name"
               />
@@ -216,31 +228,66 @@ export default function AssessmentPage({
     }
     
     if (pageNumber === 2) {
-      return <ProductDesignerAssessment />
+      return (
+        <>
+          <NameDisplay />
+          <ProductDesignerAssessment />
+        </>
+      )
     }
     
     if (pageNumber === 3) {
-      return <ProductDesignerIIAssessment />
+      return (
+        <>
+          <NameDisplay />
+          <ProductDesignerIIAssessment />
+        </>
+      )
     }
 
     if (pageNumber === 4) {
-      return <SeniorProductDesignerAssessment />
+      return (
+        <>
+          <NameDisplay />
+          <SeniorProductDesignerAssessment />
+        </>
+      )
     }
 
     if (pageNumber === 5) {
-      return <SeniorProductDesignerIIAssessment />
+      return (
+        <>
+          <NameDisplay />
+          <SeniorProductDesignerIIAssessment />
+        </>
+      )
     }
 
     if (pageNumber === 6) {
-      return <PrincipalProductDesignerAssessment />
+      return (
+        <>
+          <NameDisplay />
+          <PrincipalProductDesignerAssessment />
+        </>
+      )
     }
 
     if (pageNumber === 7) {
-      return <PrincipalProductDesignerIIAssessment />
+      return (
+        <>
+          <NameDisplay />
+          <PrincipalProductDesignerIIAssessment />
+        </>
+      )
     }
 
     if (pageNumber === 8) {
-      return <AssessmentSummary/>
+      return (
+        <>
+          <NameDisplay />
+          <AssessmentSummary />
+        </>
+      )
     }
 
     return (
