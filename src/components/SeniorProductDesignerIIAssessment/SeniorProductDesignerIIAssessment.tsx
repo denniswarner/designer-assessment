@@ -25,66 +25,129 @@ const SeniorProductDesignerIIAssessment = (): React.ReactElement => {
       title: "Strategic Thinking & Domain Expertise",
       criteria: [
         {
-          id: "product_strategy",
-          description: "Contributes to product strategy discussions and helps shape the product roadmap",
+          id: "domain_understanding",
+          description: "Has a deep understanding of title and escrow and real estate team roles, and is able to leverage individual team improvements to align to overall OKRs and mission.",
           score: 0
         },
         {
-          id: "industry_knowledge",
-          description: "Deep understanding of industry trends and their impact on product decisions",
+          id: "competitive_landscape",
+          description: "Understands the competitive landscape and industry trends for their use case area that might inform product strategy and identify sustainable advantages.",
           score: 0
         },
         {
-          id: "user_advocacy",
-          description: "Strong advocate for user needs while balancing business requirements",
+          id: "product_challenges",
+          description: "Can handle complex product challenges, often involving a strong understanding of technical, development, or business aspects",
+          score: 0
+        },
+        {
+          id: "requirements_handling",
+          description: "Deeply understands project requirements, frequently being able to gain of understanding or accurately listing trade-offs",
+          score: 0
+        },
+        {
+          id: "guidance_provision",
+          description: "Guidance and mentorship is often effective, and able to help start guidance and help chart directions using a thorough product and customer understanding",
           score: 0
         }
       ],
       averageScore: 0
     },
     {
-      title: "Leadership & Team Impact",
+      title: "Craft & Quality",
       criteria: [
         {
-          id: "mentorship",
-          description: "Actively mentors junior designers and helps them grow in their careers",
+          id: "design_quality",
+          description: "Designs are consistently a shining example of completeness; people rarely need clarification on design details like hover states, edge cases, and screen sizes",
           score: 0
         },
         {
-          id: "project_leadership",
-          description: "Takes ownership of complex projects and guides them to successful completion",
-          score: 0
-        },
-        {
-          id: "cross_functional",
-          description: "Effectively leads cross-functional initiatives and builds consensus",
+          id: "pattern_understanding",
+          description: "Deeply understands industry patterns, and can identify how and when they are effective. Only creates new ones as needed, validating them with research.",
           score: 0
         }
       ],
       averageScore: 0
     },
     {
-      title: "Design Excellence",
+      title: "Leadership, Communication, & Collaboration",
       criteria: [
         {
-          id: "system_thinking",
-          description: "Demonstrates excellent system thinking and creates scalable design solutions",
+          id: "strategic_communication",
+          description: "Starting to develop strategic communication skills vs. tactical communication",
           score: 0
         },
         {
-          id: "quality_standards",
-          description: "Sets and maintains high quality standards for the design team",
+          id: "value_communication",
+          description: "Can effectively communicate product value proposition and capabilities",
           score: 0
         },
         {
-          id: "innovation",
-          description: "Drives innovation while ensuring consistency with design principles",
+          id: "stakeholder_management",
+          description: "Can think strategically about stakeholder/project management",
+          score: 0
+        },
+        {
+          id: "business_alignment",
+          description: "Can effectively tie the team's output to the business value it drives for the entire team to understand",
+          score: 0
+        },
+        {
+          id: "peer_influence",
+          description: "Can influence peers across the company on the value of research/design, user-centered thinking, and great UX",
+          score: 0
+        },
+        {
+          id: "discipline_improvement",
+          description: "Participates in efforts to improve the entire discipline",
+          score: 0
+        }
+      ],
+      averageScore: 0
+    },
+    {
+      title: "Team Culture",
+      criteria: [
+        {
+          id: "process_facilitation",
+          description: "Comfortably runs and facilitates research and design team processes effectively",
+          score: 0
+        },
+        {
+          id: "feedback_handling",
+          description: "Others actively seek their feedback, and listen to their guidance",
+          score: 0
+        },
+        {
+          id: "process_improvement",
+          description: "Offers improvements to team processes like critiques and team meetings",
+          score: 0
+        }
+      ],
+      averageScore: 0
+    },
+    {
+      title: "Independence & Growth Mindset",
+      criteria: [
+        {
+          id: "independence",
+          description: "Works independently in most areas, may escalate to more senior individuals",
+          score: 0
+        },
+        {
+          id: "fixed_mindset",
+          description: "Knows and manages their triggers for fixed mindset",
+          score: 0
+        },
+        {
+          id: "learning_application",
+          description: "Actively seeks out and applies lessons and inspiration from the success of others",
           score: 0
         }
       ],
       averageScore: 0
     }
   ]);
+
 
   const [overallScore, setOverallScore] = useState<number>(0);
   const [qualitativeNotes, setQualitativeNotes] = useState<string>("");

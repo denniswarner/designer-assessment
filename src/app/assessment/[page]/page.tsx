@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import * as RadioGroup from '@radix-ui/react-radio-group'
+import { ChevronDown } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
 import { useUser } from '@/context/UserContext'
@@ -74,9 +75,9 @@ export default function AssessmentPage({
   const { setFullName, fullName } = useUser()
   
   // Set up our form state
+  const { fullName: selectedName, setFullName: setSelectedName } = useUser()
   const [formData, setFormData] = useState({
     assessmentType: 'self',
-    fullName: fullName || '',
     email: '',
     managerName: '',
     managerEmail: ''
@@ -159,23 +160,28 @@ export default function AssessmentPage({
           </div>
 
           <div className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="fullName" className="block text-lg font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="fullName"
-                value={formData.fullName}
-                onChange={(e) => {
-                  const newName = e.target.value;
-                  setFormData(prev => ({ ...prev, fullName: newName }));
-                  setFullName(newName);
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter your full name"
-              />
-            </div>
+          <div className="space-y-2">
+  <label htmlFor="name" className="block text-lg font-medium text-gray-700">
+    Name
+  </label>
+  <div className="relative">
+    <select
+      id="name"
+      value={selectedName}
+      onChange={(e) => setSelectedName(e.target.value)}
+      className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none text-gray-900"
+    >
+      <option value="" className="text-gray-500">Select a name</option>
+      <option value="Tara">Tara</option>
+      <option value="Ira">Ira</option>
+      <option value="Jon">Jon</option>
+      <option value="Amy">Amy</option>
+    </select>
+    <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+      <ChevronDown className="h-5 w-5 text-gray-400" />
+    </div>
+  </div>
+</div>
 
             <div className="space-y-2">
               <label htmlFor="email" className="block text-lg font-medium text-gray-700">

@@ -1,4 +1,5 @@
-// File: src/context/UserContext.tsx
+'use client'
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface UserContextType {
@@ -12,29 +13,45 @@ const UserContext = createContext<UserContextType>({
 });
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  // Initialize state from localStorage if available
-  const [fullName, setFullNameState] = useState(() => {
+  // Initialize from localStorage if available
+  const [fullName, setFullNameState] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('userName') || '';
+      const savedName = localStorage.getItem('userName');
+      console.log('Initial load from localStorage:', savedName);
+      return savedName || '';
     }
     return '';
   });
 
-  // Update localStorage when fullName changes
-  const setFullName = (name: string) => {
-    setFullNameState(name);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('userName', name);
+  // Update localStorage whenever fullName changes
+  useEffect(() => {
+    console.log('Saving to localStorage:', fullName);
+    if (fullName) {
+      localStorage.setItem('userName', fullName);
     }
+  }, [fullName]);
+
+  const setFullName = (name: string) => {
+    console.log('Setting full name:', name);
+    setFullNameState(name);
+  };
+
+  const value = {
+    fullName,
+    setFullName,
   };
 
   return (
-    <UserContext.Provider value={{ fullName, setFullName }}>
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );
 }
 
 export function useUser() {
-  return useContext(UserContext);
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+  return context;
 }
